@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include <fstream>
+#include <io.h>
 using namespace std;
 
 class Account {
@@ -16,7 +18,14 @@ public:
         this -> password = password;
     }
     void readDataBase () {}; // đọc tất cả tài khoản và mật khẩu đã lưu
-    void saveDataBase () {}: // ghi thêm tài khoản và mật khẩu mới tạo
+    void saveDataBase () { // ghi thêm tài khoản và mật khẩu mới tạo
+        ofstream Username ("D:\Tài liệu Đại học\Lập trình nâng cao\BigAssProject\Account\Username.txt");
+        Username << this -> username;
+        Username.close();
+        ofstream Password ("D:\Tài liệu Đại học\Lập trình nâng cao\BigAssProject\Account\Password.txt");
+        Password << this -> password;
+        Password.close();
+    }
     void createNewAccount () {
         string username, password;
         cout << "PLease sign up your Username: ";
