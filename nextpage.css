@@ -1,0 +1,5 @@
+body{background: #01008a;float: left;}
+.round{height: 800px;background: white;border: 5px black double;margin: auto;width: 60%;text-align: center;}
+label{float: left;width: 200px;text-align: right;}
+.add{color: #9994f4;text-decoration: underline;cursor: pointer;}
+.info{margin: 5px;float: left;width: 85%;}
