@@ -18,6 +18,7 @@ SDL_Color text_color = {63,59,55};
 
 Button sign_in;
 Button sign_up;
+Button toggle_password;
 
 bool init() {
     bool check = true;
@@ -70,6 +71,8 @@ bool Start_Screen () {
         Apptitle.loadFromRenderedText(Renderer, "Support Assist", text_color, Title_Font);
         sign_in.createButton(Renderer, "D:/MyProject/anh/signin.png", (SCREEN_WIDTH - 600)/2, SCREEN_HEIGHT/1.5);
         sign_up.createButton(Renderer, "D:/MyProject/anh/signup.png", (SCREEN_WIDTH - 600)/2 + 400, SCREEN_HEIGHT/1.5);
+        toggle_password.createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, 360);
+        toggle_password.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
     }
     return check;
 }
@@ -102,17 +105,15 @@ int main(int argc, char* args[]) {
             bool quit = false;
             SDL_Event ev;
             vector<TextBox> All_Textbox(2);
+            All_Textbox[1].setType(1);
             while (quit == false) {
                 //SDL_RenderClear(Renderer);
                 Background.render(Renderer, 0, 0);
-                Apptitle.render(Renderer, (SCREEN_WIDTH - Apptitle.getWidth())/2, SCREEN_HEIGHT/5.5);
-                All_Textbox[0].Set_TextBox_Tag(Renderer, "Username: ", text_color, Content_Font);
-				All_Textbox[0].Render_TextBox_Tag(Renderer, (SCREEN_WIDTH - All_Textbox[0].getTag().getWidth() - 600) / 2, SCREEN_HEIGHT / 3.0);
-			    All_Textbox[0].Draw_Input_Box(Renderer, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_HEIGHT / 3.0);
-			    All_Textbox[1].Set_TextBox_Tag(Renderer, "Password: ", text_color, Content_Font);
-				All_Textbox[1].Render_TextBox_Tag(Renderer, (SCREEN_WIDTH - All_Textbox[1].getTag().getWidth() - 600) / 2, (SCREEN_HEIGHT / 2.0));
-			    All_Textbox[1].Draw_Input_Box(Renderer, SCREEN_WIDTH, SCREEN_HEIGHT, (SCREEN_HEIGHT / 2.0));
+                Apptitle.render(Renderer, (SCREEN_WIDTH - Apptitle.getW())/2, SCREEN_HEIGHT/5.5);
+                All_Textbox[0].render(Renderer, "Username: ", (SCREEN_WIDTH - All_Textbox[0].getTag().getW() - 600) / 2, SCREEN_HEIGHT / 3.0, text_color, Content_Font);
+                All_Textbox[1].render(Renderer, "Password: ", (SCREEN_WIDTH - All_Textbox[1].getTag().getW() - 600) / 2, SCREEN_HEIGHT / 2.0, text_color, Content_Font);
                 int pos;
+                toggle_password.render(Renderer);
                 sign_in.render(Renderer);
                 sign_up.render(Renderer);
                 while (SDL_PollEvent(&ev) != 0) {
@@ -129,7 +130,17 @@ int main(int argc, char* args[]) {
                             else {
                                 All_Textbox[i].setState(false);
                             }
-                         }
+                        }
+                        if (toggle_password.isInside(ev.button.x, ev.button.y) == true) {
+                            if (toggle_password.getCurrentState() == BUTTON_STATE_MOUSE_OUTSIDE) {
+                                toggle_password.setButtonState(BUTTON_STATE_MOUSE_OVER_MOTION);
+                                All_Textbox[1].setType(0);
+                            }
+                            else {
+                                toggle_password.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
+                                All_Textbox[1].setType(1);
+                            }
+                        }
                     } else if (ev.type == SDL_KEYDOWN) {
                         if (ev.key.keysym.sym == SDLK_BACKSPACE && All_Textbox[pos].getInputText().length() > 0) {
                             if (All_Textbox[pos].getState() == true) {

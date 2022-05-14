@@ -13,7 +13,6 @@ enum ButtonState {
 //Button constants
 const int BUTTON_WIDTH = 200;
 const int BUTTON_HEIGHT = 100;
-const int TOTAL_BUTTONS = 2;
 
 //The mouse button
 class Button {
@@ -23,11 +22,9 @@ class Button {
 	ButtonState CurrentState;
 	SDL_Rect Shape[BUTTON_STATE_TOTAL];
 	LTexture TEXTURE;
-	Mix_Chunk* sound_effect;
 public:
 	//Initializes internal variables
 	Button() {
-		this -> sound_effect = NULL;
 		this -> Position.x = 0;
 		this -> Position.y = 0;
 		this -> CurrentState = BUTTON_STATE_MOUSE_OUTSIDE;
@@ -48,28 +45,34 @@ public:
 			this -> Shape[i].h = BUTTON_HEIGHT;
 		}
 	}
+	ButtonState getCurrentState() {
+		return this->CurrentState;
+	}
+	void setButtonState(ButtonState n) {
+		this->CurrentState = n;
+	}
+	bool isInside(int x, int y) {
+		if (x < this->Position.x || x > this->Position.x + BUTTON_WIDTH
+			|| y < this->Position.y
+			|| y > this->Position.y + BUTTON_HEIGHT) {
+			return false;
+			this->CurrentState = BUTTON_STATE_MOUSE_OUTSIDE;
+		}
+		return true;
+	}
 	//Handles mouse event
 	void handleEvent(SDL_Renderer* Renderer, SDL_Event* event) {
 		if (event -> type == SDL_MOUSEMOTION || event -> type == SDL_MOUSEBUTTONDOWN
 										     || event -> type == SDL_MOUSEBUTTONUP) {
 			int x, y;
 			SDL_GetMouseState (&x, &y);
-			bool check_inside = true;
-			if (x < this -> Position.x || x > this -> Position.x + BUTTON_WIDTH
-									   || y < this -> Position.y
-									   || y > this -> Position.y + BUTTON_HEIGHT) {
-				check_inside = false;
-				CurrentState = BUTTON_STATE_MOUSE_OUTSIDE;
-			}
-			if (check_inside == true) {
+			if (this->isInside(x, y) == true) {
 				switch (event -> type) {
 					case SDL_MOUSEMOTION:
 						CurrentState = BUTTON_STATE_MOUSE_OVER_MOTION;
 						break;
 					case SDL_MOUSEBUTTONDOWN:
 						CurrentState = BUTTON_STATE_MOUSE_CLICK;
-						this -> sound_effect = Mix_LoadWAV("low.wav");
-						Mix_PlayChannel(-1, sound_effect, 0);
 						SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
     					SDL_RenderClear(Renderer);
     					SDL_RenderPresent(Renderer);
@@ -87,7 +90,6 @@ public:
 		this -> TEXTURE.render(Renderer, this -> Position.x, this -> Position.y, &this -> Shape[CurrentState]);
 	}
 	void free() {
-		this -> sound_effect = NULL;
 		this -> TEXTURE.free();
 	}
 	bool createButton (SDL_Renderer* Renderer, string path, double x, double y) {
