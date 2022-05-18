@@ -1,6 +1,5 @@
 #pragma once
 #include "LTexture.cpp"
-#include <SDL_mixer.h>
 
 enum ButtonState { 
 	BUTTON_STATE_MOUSE_OUTSIDE = 0,
@@ -16,7 +15,6 @@ const int BUTTON_HEIGHT = 100;
 
 //The mouse button
 class Button {
-    //Top left position
 	SDL_Point Position;
 	//Currently used global sprite
 	ButtonState CurrentState;
@@ -56,7 +54,6 @@ public:
 			|| y < this->Position.y
 			|| y > this->Position.y + BUTTON_HEIGHT) {
 			return false;
-			this->CurrentState = BUTTON_STATE_MOUSE_OUTSIDE;
 		}
 		return true;
 	}
@@ -73,9 +70,6 @@ public:
 						break;
 					case SDL_MOUSEBUTTONDOWN:
 						CurrentState = BUTTON_STATE_MOUSE_CLICK;
-						SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
-    					SDL_RenderClear(Renderer);
-    					SDL_RenderPresent(Renderer);
 						break;
 					case SDL_MOUSEBUTTONUP:
 						CurrentState = BUTTON_STATE_MOUSE_REALEASE;
@@ -91,7 +85,7 @@ public:
 	}
 	void free() {
 		this -> TEXTURE.free();
-	}
+ 	}
 	bool createButton (SDL_Renderer* Renderer, string path, double x, double y) {
 		if (!this -> loadTexture(Renderer, path)) {
 			cout << "Failed to load button sprite texture!" << endl;
