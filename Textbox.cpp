@@ -1,8 +1,5 @@
 #pragma once
-#include <iostream>
-#include <SDL.h>
 #include "LTexture.cpp"
-using namespace std;
 
 class TextBox {
     LTexture Tag;
@@ -119,5 +116,10 @@ public:
         else {
             this->type == 0;
         }
+    }
+    void free() {
+        this->Tag.free();
+        this->Input.free();
+        this->InputText = "";
     }
 };

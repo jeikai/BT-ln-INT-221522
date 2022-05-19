@@ -43,6 +43,14 @@ public:
 			this -> Shape[i].h = BUTTON_HEIGHT;
 		}
 	}
+	void setShape(int w, int h) {
+		for (int i = 0; i < 3; i++) {
+			this->Shape[i].x = 0;
+			this->Shape[i].y = i * 100;
+			this->Shape[i].w = w;
+			this->Shape[i].h = h;
+		}
+	}
 	ButtonState getCurrentState() {
 		return this->CurrentState;
 	}
@@ -93,6 +101,17 @@ public:
 		} else {
 			this -> setShape();
 			this -> setPosition(x, y);
+		}
+		return true;
+	}
+	bool createButton(SDL_Renderer* Renderer, string path, double x, double y, int w, int h) {
+		if (!this->loadTexture(Renderer, path)) {
+			cout << "Failed to load button sprite texture!" << endl;
+			return false;
+		}
+		else {
+			this->setShape(w, h);
+			this->setPosition(x, y);
 		}
 		return true;
 	}

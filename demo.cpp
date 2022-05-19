@@ -136,6 +136,7 @@ void Clear_Start_Screen() {
 vector<TextBox> SignUp_Textbox(3);
 vector<Button> Toggle_Switch(2);
 Button Sign_up;
+Button SignUp_Back;
 
 void Signup_Screen() {
     for (int i = 1; i < 3; i++) {
@@ -144,6 +145,7 @@ void Signup_Screen() {
     Toggle_Switch[0].createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, SCREEN_HEIGHT/3);
     Toggle_Switch[1].createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, (11 * SCREEN_HEIGHT) / 20);
     Sign_up.createButton(Renderer, "D:/MyProject/anh/signup.png", (SCREEN_WIDTH - 600) / 2 + 400, SCREEN_HEIGHT / 1.5);
+    SignUp_Back.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
     Signup_Warning[0].loadFromRenderedText(Renderer, "Username already exits!", warning_color, Warning_Font);
     Signup_Warning[1].loadFromRenderedText(Renderer, "Password must have 5-20 letters including a special character!", warning_color, Warning_Font);
     Signup_Warning[2].loadFromRenderedText(Renderer, "Password doesn't match!", warning_color, Warning_Font);
@@ -158,6 +160,7 @@ void Render_Signup_Screen() {
         Toggle_Switch[i].render(Renderer);
     }
     Sign_up.render(Renderer);
+    SignUp_Back.render(Renderer);
 }
 
 void Clear_SignUp_Screen() {
@@ -171,6 +174,7 @@ void Clear_SignUp_Screen() {
         Toggle_Switch[i].free();
     }
     Sign_up.free();
+    SignUp_Back.free();
     SDL_RenderClear(Renderer);
 }
 
@@ -278,6 +282,12 @@ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& cod
                     else {
                         Sign_up.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
                     }
+                    if (SignUp_Back.isInside(ev.button.x, ev.button.y)) {
+                        SignUp_Back.setButtonState(BUTTON_STATE_MOUSE_OVER_MOTION);
+                    }
+                    else {
+                        SignUp_Back.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
+                    }
                 }
                 else if (ev.type == SDL_MOUSEBUTTONDOWN) {
                     cout << "mouse pressed" << endl;
@@ -313,10 +323,19 @@ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& cod
                             Background.render(Renderer, 0, 0);
                         }
                     }
+                    else if (SignUp_Back.isInside(ev.button.x, ev.button.y)) {
+                        SignUp_Back.setButtonState(BUTTON_STATE_MOUSE_CLICK);
+                        Current = Start;
+                        Clear_SignUp_Screen();
+                        Start_Screen();
+                    }
                 }
                 else if (ev.type == SDL_MOUSEBUTTONUP) {
                     if (Sign_up.isInside(ev.button.x, ev.button.y)) {
                         Sign_up.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
+                    }
+                    else if (SignUp_Back.isInside(ev.button.x, ev.button.y)) {
+                        SignUp_Back.setButtonState(BUTTON_STATE_MOUSE_OUTSIDE);
                     }
                 }
                 else if (ev.type == SDL_KEYDOWN) {
