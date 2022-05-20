@@ -17,8 +17,6 @@ SDL_Color text_color = {63,59,55};
 SDL_Color warning_color = { 211, 12, 7 };
 
 LTexture Background;
-LTexture Signin_Warning;
-vector<LTexture> Signup_Warning(3);
 
 Account User;
 
@@ -100,6 +98,7 @@ vector<TextBox> Start_Textbox(2);
 Button sign_in;
 Button sign_up;
 Button toggle_password;
+LTexture Signin_Warning;
 
 //Start screen's functions
 void Start_Screen () {
@@ -131,13 +130,16 @@ void Clear_Start_Screen() {
     sign_up.free();
     SDL_RenderClear(Renderer);
 }
+//
 
 //SignUp screen's contents
 vector<TextBox> SignUp_Textbox(3);
 vector<Button> Toggle_Switch(2);
 Button Sign_up;
 Button SignUp_Back;
+vector<LTexture> Signup_Warning(3);
 
+//SignUp screen's functions
 void Signup_Screen() {
     for (int i = 1; i < 3; i++) {
         SignUp_Textbox[i].setType(1);
@@ -177,11 +179,32 @@ void Clear_SignUp_Screen() {
     SignUp_Back.free();
     SDL_RenderClear(Renderer);
 }
+//
 
 //Menu's contents
-Button Exit;
+Button Exit, Focus, Training, Todo;
 
-void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& code) {
+//Menu's functions
+void Menu_Screen() {
+    Exit.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
+    Focus.createButton(Renderer, "D:/MyProject/anh/timerbutton.png", (SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 300)/2, 200, 200);
+    Training.createButton(Renderer, "D:/MyProject/anh/diagbutton.png", (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT)/2, 200, 200);
+    Todo.createButton(Renderer, "D:/MyProject/anh/listbutton.png", SCREEN_WIDTH / 2, (SCREEN_HEIGHT)/2, 200, 200);
+}
+
+void Render_Menu_Screen() {
+    Background.render(Renderer, 0, 0);
+    Exit.render(Renderer);
+    Focus.render(Renderer);
+    Training.render(Renderer);
+    Todo.render(Renderer);
+}
+
+void Clear_Menu_Screen() {
+
+}
+
+ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& code) {
     while (SDL_PollEvent(&ev) != 0) {
         if (ev.type == SDL_QUIT) {
             quit = true;
@@ -221,7 +244,7 @@ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& cod
                         if (User.signin(Start_Textbox[0].getInputText(), Start_Textbox[1].getInputText()) == true) {
                             Current = Menu;
                             Clear_Start_Screen();
-                            Background.render(Renderer, 0, 0);
+                            Menu_Screen();
                         }
                         else {
                             Signin_Warning.loadFromRenderedText(Renderer, "Invalid Username or Password!", warning_color, Warning_Font);
@@ -320,7 +343,7 @@ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& cod
                         if (code == 0) {
                             Current = Menu;
                             Clear_SignUp_Screen();
-                            Background.render(Renderer, 0, 0);
+                            Menu_Screen();
                         }
                     }
                     else if (SignUp_Back.isInside(ev.button.x, ev.button.y)) {
@@ -358,6 +381,9 @@ void handle_event(Screen& Current, bool& quit, SDL_Event& ev, int& pos, int& cod
                         }
                     }
                 }
+                break;
+            case Menu:
+
                 break;
             }
         }
@@ -407,6 +433,9 @@ int main(int argc, char* args[]) {
                     if (code != 0) {
                         Signup_Warning[code - 1].render(Renderer, (SignUp_Textbox[2].get_input_box_x() + SignUp_Textbox[2].get_input_box_w() - Signup_Warning[code - 1].getW()), (SignUp_Textbox[2].get_input_box_y() + SignUp_Textbox[2].get_input_box_h()));
                     }
+                }
+                else if (Current == Menu) {
+                    Render_Menu_Screen();
                 }
                 handle_event(Current, quit, ev, pos, code);
                 if (Current == Start) {
