@@ -46,7 +46,7 @@ public:
 	void setShape(int w, int h) {
 		for (int i = 0; i < 3; i++) {
 			this->Shape[i].x = 0;
-			this->Shape[i].y = i * 100;
+			this->Shape[i].y = i * h;
 			this->Shape[i].w = w;
 			this->Shape[i].h = h;
 		}
