@@ -253,9 +253,9 @@ void Focus_Screen() {
             }
         }
         else {
-            Timer temp1(((i + 1) * 2 * 60 - (i - 1) * 2 * 60) / 2);
-            Timer temp2((i - 1) * 2 * 60);
-            Timer temp3(((i + 1) * 2 * 60 - (i - 1) * 2 * 60) / 2);
+            Timer temp1(((i + 1) * 15 * 60 - (i - 1) * 15 * 60) / 2);
+            Timer temp2((i - 1) * 15 * 60);
+            Timer temp3(((i + 1) * 15 * 60 - (i - 1) * 15 * 60) / 2);
             if (Timer_Options[i].size() == 0) {
                 Timer_Options[i].push_back(temp1);
                 Timer_Options[i].push_back(temp2);
