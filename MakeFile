@@ -1,8 +1,11 @@
-How to run this project:
-    + git init
-    + git clone https://github.com/jeikai/BT-ln-INT-221522.git
-    +Enter these lines in cmd:
-        g++ -Isrc/include -Lsrc/lib -o main main.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-Contributors:
-    +Nguyen Minh Kien: textbox, timer functions, training functions, i/o files, password, sign in, sign up
-    +Tran Quang Phuc: app graphics and design buttons, list funtions, making menu 
+all:
+    
+    g++ -Isrc/include -Lsrc/lib -c MyTexture.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+    g++ -Isrc/include -Lsrc/lib -c Button.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+    g++ -Isrc/include -Lsrc/lib -c Textbox.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+    g++ -Isrc/include -Lsrc/lib -c Timer.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+     g++ -Isrc/include -Lsrc/lib -o demo demo.cpp MyTexture.o Button.o Textbox.o Timer.o Account.o -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
