@@ -1,125 +1,146 @@
 #pragma once
-#include "LTexture.cpp"
+#include "Textbox.h"
 
-class TextBox {
-    LTexture Tag;
-    SDL_Rect input_box;
-    string InputText;
-    LTexture Input;
-    bool state;
-    int type;
-    /*
-    type = 0 (public)
-    type = 1 (protected)
-    */
-public: 
-    TextBox () {
-        SDL_Rect rect;
-        rect.x = 0;
-        rect.y = 0;
-        rect.w = 0;
-        rect.h = 0;
-        this->input_box = rect;
-        this->InputText = "";
-        this->state = false;
-        this->type = 0;
+Textbox::Textbox () {
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 0;
+    rect.h = 0;
+    InputBox = rect;
+    InputText = "";
+    state = false;
+    type = 0;
+}
+
+MyTexture Textbox::getTag() {
+    return Tag;
+}
+
+void Textbox::setTag (SDL_Renderer* Renderer, string Name_Tag, SDL_Color Text_Color, TTF_Font* Font) {
+    Tag.loadFromRenderedText(Renderer, Name_Tag, Text_Color, Font);
+}
+
+void Textbox::renderTag (SDL_Renderer* Renderer, int x, int y) {
+    Tag.render(Renderer, x, y);
+}
+
+int Textbox::getInputBoxX() {
+    return InputBox.x;
+}
+
+int Textbox::getInputBoxY() {
+    return InputBox.y;
+}
+
+int Textbox::getInputBoxW() {
+    return InputBox.w;
+}
+
+int Textbox::getInputBoxH() {
+    return InputBox.h;
+}
+
+void Textbox::renderInputBox(SDL_Renderer* Renderer) {
+    InputBox.h = Tag.getH();
+    InputBox.w = 600;
+    InputBox.x = Tag.getX() + Tag.getW();
+    InputBox.y = Tag.getY();
+    SDL_SetRenderDrawColor(Renderer, 63, 59, 55, 255);
+    SDL_RenderDrawRect(Renderer, &InputBox);
+}
+
+void Textbox::renderInputBox(SDL_Renderer* Renderer, int w) {
+    InputBox.h = Tag.getH();
+    InputBox.w = w;
+    InputBox.x = Tag.getX() + Tag.getW();
+    InputBox.y = Tag.getY();
+    SDL_SetRenderDrawColor(Renderer, 63, 59, 55, 255);
+    SDL_RenderDrawRect(Renderer, &InputBox);
+}
+
+void Textbox::render(SDL_Renderer* Renderer, string tag, int x, int y, SDL_Color text_color, TTF_Font* font) {
+    setTag(Renderer, tag, text_color, font);
+    renderTag(Renderer, x, y);
+    renderInputBox(Renderer);
+}
+
+void Textbox::render(SDL_Renderer* Renderer, string tag, int x, int y, int w, SDL_Color text_color, TTF_Font* font) {
+    setTag(Renderer, tag, text_color, font);
+    renderTag(Renderer, x, y);
+    renderInputBox(Renderer, w);
+}
+
+bool Textbox::isMouseInside(int &x, int &y) {
+    if ((x >= getInputBoxX() && x <= (getInputBoxX() + getInputBoxW())) && (y >= getInputBoxY() && y <= (getInputBoxY() + getInputBoxH()))) {
+        return true;
+    } else {
+        return false;
     }
-    void Set_Tag (SDL_Renderer* Renderer, string Name_Tag, SDL_Color Text_Color, TTF_Font* Font) {
-        this -> Tag.loadFromRenderedText(Renderer, Name_Tag, Text_Color, Font);
-    }
-    void Render_Tag (SDL_Renderer* Renderer, int x, int y) {
-        this -> Tag.render(Renderer, x, y);
-    }
-    LTexture getTag() {
-        return this -> Tag;
-    }
-    void Render_InputBox(SDL_Renderer* Renderer) {
-        this->input_box.h = this->Tag.getH();
-        this->input_box.w = 600;
-        this->input_box.x = this->Tag.getX() + this->Tag.getW();
-        this->input_box.y = this->Tag.getY();
-        SDL_SetRenderDrawColor(Renderer, 63, 59, 55, 255);
-        SDL_RenderDrawRect(Renderer, &this->input_box);
-    }
-    void render(SDL_Renderer* Renderer, string tag, int x, int y, SDL_Color text_color, TTF_Font* font) {
-        //this->type = type;
-        this->Set_Tag(Renderer, tag, text_color, font);
-        this->Render_Tag(Renderer, x, y);
-        this->Render_InputBox(Renderer);
-    }
-    int get_input_box_w () {
-        return this -> input_box.w;
-    }
-    int get_input_box_h () {
-        return this -> input_box.h;
-    }
-    int get_input_box_x () {
-        return this -> input_box.x;
-    }
-    int get_input_box_y () {
-        return this -> input_box.y;
-    }
-    bool is_mouse_inside(int &x, int &y) {
-        if ((x >= this -> get_input_box_x() && x <= (this -> get_input_box_x() + this -> get_input_box_w())) && (y >= this -> get_input_box_y() && y <= (this -> get_input_box_y() + this -> get_input_box_h()))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    string getInputText () {
-        return this -> InputText;
-    }
-    void setInputText (string InputText) {
-        this -> InputText = InputText;
-    } 
-    void inputPop() {
-        this -> InputText.pop_back();
-    }
-    void updateInputText (char* ch) {
-        this -> InputText += ch;
-        std::cout << this -> InputText << endl;
-    }
-    void renderInputText (SDL_Renderer* Renderer, TTF_Font* textFont, SDL_Color textColor) {
-        if (this->InputText != "") {
-            if (this->type == 0) {
-                this->Input.loadFromRenderedText(Renderer, this->InputText, textColor, textFont);
-            }
-            else {
-                string temp = "";
-                for (int i = 0; i < this->InputText.length(); i++) {
-                    temp += '*';
-                }
-                this->Input.loadFromRenderedText(Renderer, temp, textColor, textFont);
-            }
-        }
-        else {
-            this->Input.loadFromRenderedText(Renderer, " ", textColor, textFont);
-        }
-        this->Input.render(Renderer, this->get_input_box_x(), this->get_input_box_y());
-    }
-    void setState(bool state) {
-        this -> state = state;
-    }
-    bool getState () {
-        return this -> state;
-    }
-    int getType() {
-        return this->type;
-    }
-    void setType(int type) {
-        this->type = type;
-    }
-    void changeType() {
-        if (this->type == 0) {
-            this->type == 1;
+}
+
+string Textbox::getInputText () {
+    return InputText;
+}
+
+void Textbox::setInputText (string text) {
+    InputText = text;
+}
+
+void Textbox::popInputText() {
+    InputText.pop_back();
+}
+
+void Textbox::updateInputText (char* ch) {
+    InputText += ch;
+    std::cout << InputText << endl;
+}
+
+void Textbox::renderInputText (SDL_Renderer* Renderer, TTF_Font* textFont, SDL_Color textColor) {
+    if (InputText != "") {
+        if (type == 0) {
+            Input.loadFromRenderedText(Renderer, InputText, textColor, textFont);
         }
         else {
-            this->type == 0;
+            string temp = "";
+            for (int i = 0; i < InputText.length(); i++) {
+                temp += '*';
+            }
+            Input.loadFromRenderedText(Renderer, temp, textColor, textFont);
         }
     }
-    void free() {
-        this->Tag.free();
-        this->Input.free();
-        this->InputText = "";
+    else {
+        Input.loadFromRenderedText(Renderer, " ", textColor, textFont);
     }
-};
+    Input.render(Renderer, getInputBoxX(), getInputBoxY());
+}
+
+bool Textbox::getState() {
+    return state;
+}
+
+void Textbox::setState(bool State) {
+    state = State;
+}
+
+int Textbox::getType() {
+    return type;
+}
+
+void Textbox::setType(int Type) {
+    type = Type;
+}
+
+void Textbox::changeType() {
+    if (type == 0) {
+        type = 1;
+    }
+    else {
+        type = 0;
+    }
+}
+void Textbox::free() {
+    Tag.free();
+    Input.free();
+    InputText = "";
+}
