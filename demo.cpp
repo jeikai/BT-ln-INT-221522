@@ -3,6 +3,7 @@
 #include "Account.h"
 #include "Timer.h"
 #include <ctime>
+#include <cmath>
 
 SDL_Window* Window = NULL;
 SDL_Renderer* Renderer = NULL;
@@ -21,6 +22,8 @@ SDL_Color warning_color = { 211, 12, 7 };
 
 MyTexture Background;
 Account User;
+
+vector<vector<string>> All_Account;
 
 bool init() {
     bool check = true;
@@ -65,31 +68,31 @@ bool init() {
 }
 
 bool loadMedia() {
-    if (Background.loadFromFile(Renderer, "D:/MyProject/anh/background.jpg") == false) {
+    if (Background.loadFromFile(Renderer, "anh/background.jpg") == false) {
         return false;
     }
     else {
-        Title_Font = TTF_OpenFont("D:/MyProject/font/Roboto-Medium.ttf", 60);
+        Title_Font = TTF_OpenFont("font/Roboto-Medium.ttf", 60);
         if (Title_Font == NULL) {
             cout << "Failed to load title font! SDL_ttf Error: " << TTF_GetError() << endl;
             return false;
         }
-        Content_Font = TTF_OpenFont("D:/MyProject/font/Roboto-Medium.ttf", 40);
+        Content_Font = TTF_OpenFont("font/Roboto-Medium.ttf", 40);
         if (Content_Font == NULL) {
             cout << "Failed to load content font! SDL_ttf Error: " << TTF_GetError() << endl;
             return false;
         }
-        Warning_Font = TTF_OpenFont("D:/MyProject/font/Roboto-Medium.ttf", 30);
+        Warning_Font = TTF_OpenFont("font/Roboto-Medium.ttf", 30);
         if (Warning_Font == NULL) {
             cout << "Failed to load warning font! SDL_ttf Error: " << TTF_GetError() << endl;
             return false;
         }
-        Description_Font = TTF_OpenFont("D:/MyProject/font/Roboto-Medium.ttf", 20);
+        Description_Font = TTF_OpenFont("font/Roboto-Medium.ttf", 20);
         if (Description_Font == NULL) {
             cout << "Failed to load description font! SDL_ttf Error: " << TTF_GetError() << endl;
             return false;
         }
-        Time_Font = TTF_OpenFont("D:/MyProject/font/Roboto-BoldCondensed.ttf", 150);
+        Time_Font = TTF_OpenFont("font/Roboto-BoldCondensed.ttf", 150);
         if (Time_Font == NULL) {
             cout << "Failed to load time font! SDL_ttf Error: " << TTF_GetError() << endl;
             return false;
@@ -120,9 +123,9 @@ MyTexture Signin_Warning;
 void Start_Screen () {
     Apptitle.loadFromRenderedText(Renderer, "Support Assist", text_color, Title_Font);
     Start_Textbox[1].setType(1);
-    sign_in.createButton(Renderer, "D:/MyProject/anh/signin.png", (SCREEN_WIDTH - 600) / 2, SCREEN_HEIGHT / 1.5);
-    sign_up.createButton(Renderer, "D:/MyProject/anh/signup.png", (SCREEN_WIDTH - 600) / 2 + 400, SCREEN_HEIGHT / 1.5);
-    toggle_password.createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, 360);
+    sign_in.createButton(Renderer, "anh/signin.png", (SCREEN_WIDTH - 600) / 2, SCREEN_HEIGHT / 1.5);
+    sign_up.createButton(Renderer, "anh/signup.png", (SCREEN_WIDTH - 600) / 2 + 400, SCREEN_HEIGHT / 1.5);
+    toggle_password.createButton(Renderer, "anh/toggle_password.png", 1040, 360);
 }
 
 void Render_Start_Screen() {
@@ -160,10 +163,10 @@ void Signup_Screen() {
     for (int i = 1; i < 3; i++) {
         SignUp_Textbox[i].setType(1);
     }
-    Toggle_Switch[0].createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, SCREEN_HEIGHT/3);
-    Toggle_Switch[1].createButton(Renderer, "D:/MyProject/anh/toggle_password.png", 1040, (11 * SCREEN_HEIGHT) / 20);
-    Sign_up.createButton(Renderer, "D:/MyProject/anh/signup.png", (SCREEN_WIDTH - 600) / 2 + 400, SCREEN_HEIGHT / 1.5);
-    SignUp_Back.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
+    Toggle_Switch[0].createButton(Renderer, "anh/toggle_password.png", 1040, SCREEN_HEIGHT/3);
+    Toggle_Switch[1].createButton(Renderer, "anh/toggle_password.png", 1040, (11 * SCREEN_HEIGHT) / 20);
+    Sign_up.createButton(Renderer, "anh/signup.png", (SCREEN_WIDTH - 600) / 2 + 400, SCREEN_HEIGHT / 1.5);
+    SignUp_Back.createButton(Renderer, "anh/back.png", 0, 0, 50, 50);
     Signup_Warning[0].loadFromRenderedText(Renderer, "Username already exits!", warning_color, Warning_Font);
     Signup_Warning[1].loadFromRenderedText(Renderer, "Password must have 5-20 letters including a special character!", warning_color, Warning_Font);
     Signup_Warning[2].loadFromRenderedText(Renderer, "Password doesn't match!", warning_color, Warning_Font);
@@ -202,10 +205,10 @@ Button Exit, focus, training, todo;
 
 //Menu's functions
 void Menu_Screen() {
-    Exit.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
-    focus.createButton(Renderer, "D:/MyProject/anh/timerbutton.png", (SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 350)/2, 200, 200);
-    training.createButton(Renderer, "D:/MyProject/anh/trainingbutton.png", (SCREEN_WIDTH - 400) / 2 - 25, (SCREEN_HEIGHT)/2, 200, 200);
-    todo.createButton(Renderer, "D:/MyProject/anh/Todobutton.png", SCREEN_WIDTH / 2 + 25, (SCREEN_HEIGHT)/2, 200, 200);
+    Exit.createButton(Renderer, "anh/back.png", 0, 0, 50, 50);
+    focus.createButton(Renderer, "anh/timerbutton.png", (SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 350)/2, 200, 200);
+    training.createButton(Renderer, "anh/trainingbutton.png", (SCREEN_WIDTH - 400) / 2 - 25, (SCREEN_HEIGHT)/2, 200, 200);
+    todo.createButton(Renderer, "anh/Todobutton.png", SCREEN_WIDTH / 2 + 25, (SCREEN_HEIGHT)/2, 200, 200);
 }
 
 void Render_Menu_Screen() {
@@ -274,10 +277,10 @@ void Focus_Screen() {
     for (int i = 2; i < 4; i++) {
         Time_Options_Description[i].loadFromRenderedText(Renderer, "You'll have 1 breaks.", text_color, Description_Font);
     }
-    Arrows[0].createButton(Renderer, "D:/MyProject/anh/up.png", 800, 250, 76, 75);
-    Arrows[1].createButton(Renderer, "D:/MyProject/anh/down.png", 400, 250, 76, 75);
-    Start_Stop.createButton(Renderer, "D:/MyProject/anh/Start_Stop.png", (SCREEN_WIDTH - 106)/2, 380, 106, 305 / 3);
-    Focus_Back.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
+    Arrows[0].createButton(Renderer, "anh/up.png", 800, 250, 76, 75);
+    Arrows[1].createButton(Renderer, "anh/down.png", 400, 250, 76, 75);
+    Start_Stop.createButton(Renderer, "anh/Start_Stop.png", (SCREEN_WIDTH - 106)/2, 380, 106, 305 / 3);
+    Focus_Back.createButton(Renderer, "anh/back.png", 0, 0, 50, 50);
 }
 
 void Render_Focus_Screen() {
@@ -379,7 +382,6 @@ void Calculate_BMI() {
     for (int i = 0; i < Body[1].getInputText().length(); i++) {
         b = b + (Body[1].getInputText()[i] - '0') * pow(10, Body[1].getInputText().length() - i - 1);
     }
-    cout << a << " " << b << endl;
     double bmi = a / pow(b/100, 2);
     string level = "";
     for (int i = 0; i < 4; i++) {
@@ -403,12 +405,12 @@ void Calculate_BMI() {
 void Training_Screen() {
     Units[0].loadFromRenderedText(Renderer, "kg", text_color, Content_Font);
     Units[1].loadFromRenderedText(Renderer, "cm", text_color, Content_Font);
-    Training_Back.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
-    Calculate.createButton(Renderer, "D:/MyProject/anh/BMI.png", 270, SCREEN_HEIGHT / 3, 102, 101);
+    Training_Back.createButton(Renderer, "anh/back.png", 0, 0, 50, 50);
+    Calculate.createButton(Renderer, "anh/BMI.png", 270, SCREEN_HEIGHT / 3, 102, 101);
     BMI.loadFromRenderedText(Renderer, "0.0", text_color, Content_Font);
-    Exercises[0].createButton(Renderer, "D:/MyProject/anh/Jogging.png", (SCREEN_WIDTH - 800) / 2, 350, 200, 200);
-    Exercises[1].createButton(Renderer, "D:/MyProject/anh/Running.png", (SCREEN_WIDTH - 800) / 2 + 300, 350, 200, 200);
-    Exercises[2].createButton(Renderer, "D:/MyProject/anh/bicycle.png", (SCREEN_WIDTH - 800) / 2 + 600, 350, 200, 200);
+    Exercises[0].createButton(Renderer, "anh/Jogging.png", (SCREEN_WIDTH - 800) / 2, 350, 200, 200);
+    Exercises[1].createButton(Renderer, "anh/Running.png", (SCREEN_WIDTH - 800) / 2 + 300, 350, 200, 200);
+    Exercises[2].createButton(Renderer, "anh/bicycle.png", (SCREEN_WIDTH - 800) / 2 + 600, 350, 200, 200);
 }
 
 void Render_Training_Screen() {
@@ -447,38 +449,21 @@ void Clear_Training_Screen() {
 //Todo's Content
 vector<Textbox> task(100);
 int Count = 0, Todo_Pos = 0;
-Button Todo_Back, ADD, Save;
+Button Todo_Back, ADD, Save, Del;
 MyTexture noti_check;
 vector<Button> check(100);
 
 //Todo's functions
 
-//void readTask(Account User, vector<Textbox> todo_list, int& count) {
-//    for (int i = 0; i < All_Account.size(); i++) {
-//        if (User.getUserName() == All_Account[i][0]) {
-//            if (All_Account[i].size() >= 3) {
-//                for (int j = 2; j < All_Account[i].size(); j++) {
-//                    cout << All_Account[i][j] << endl;
-//                    todo_list[count].setInputText(All_Account[i][j]);
-//                    count++;
-//                    cout << count << endl;
-//                }
-//            }
-//        }
-//    }
-//}
-
 void Todo_Screen() {
+    Todo_Back.createButton(Renderer, "anh/back.png", 0, 0, 50, 50);
+    ADD.createButton(Renderer, "anh/add.png", 260, 35, 50, 50);
+    Save.createButton(Renderer, "anh/save.png", 1000, 35, 50, 50);
+    Del.createButton(Renderer, "anh/Del.png", 1000, 90, 50, 50);
     for (int i = 0; i < 100; i++) {
-        task[i].setType(0);
+        check[i].createButton(Renderer, "anh/check.png", 970, 50 * (i + 1), 20, 20);
     }
-    Todo_Back.createButton(Renderer, "D:/MyProject/anh/back.png", 0, 0, 50, 50);
-    ADD.createButton(Renderer, "D:/MyProject/anh/add.png", 260, 35, 50, 50);
-    Save.createButton(Renderer, "D:/MyProject/anh/save.png", 1000, 35, 50, 50);
-    for (int i = 0; i < 100; i++) {
-        check[i].createButton(Renderer, "D:/MyProject/anh/check.png", 970, 50 * (i + 1), 20, 20);
-    }
-    //readTask(User, task, Count);
+    User.readTask(All_Account, task, check, Count);
 }
 
 void Render_Todo_Screen() {
@@ -486,6 +471,7 @@ void Render_Todo_Screen() {
     Todo_Back.render(Renderer);
     ADD.render(Renderer);
     Save.render(Renderer);
+    Del.render(Renderer);
     for (int i = 0; i < Count; i++) {
         task[i].render(Renderer, "*", 350, 50 * (i + 1), text_color, Content_Font);
         check[i].render(Renderer);
@@ -498,6 +484,7 @@ void Clear_Todo_Screen() {
     Todo_Back.free();
     ADD.free();
     Save.free();
+    Del.free();
     noti_check.free();
     for (int i = 0; i < task.size(); i++) {
         task[i].free();
@@ -542,7 +529,7 @@ void Clear_Todo_Screen() {
                     }
                     if (sign_in.isInside(ev.button.x, ev.button.y)) {
                         sign_in.setState(BUTTON_STATE_MOUSE_CLICK);
-                        if (User.signIn(Start_Textbox[0].getInputText(), Start_Textbox[1].getInputText()) == true) {
+                        if (User.signIn(All_Account, Start_Textbox[0].getInputText(), Start_Textbox[1].getInputText()) == true) {
                             Current = Menu;
                             Clear_Start_Screen();
                             Menu_Screen();
@@ -558,7 +545,6 @@ void Clear_Todo_Screen() {
                         Signup_Screen();
                     }
                     else if (toggle_password.isInside(ev.button.x, ev.button.y) == true) {
-                        cout << "Mouse is in side toggle switch" << endl;
                         if (toggle_password.getState() == BUTTON_STATE_MOUSE_OUTSIDE) {
                             toggle_password.setState(BUTTON_STATE_MOUSE_OVER_MOTION);
                             Start_Textbox[1].setType(0);
@@ -616,12 +602,10 @@ void Clear_Todo_Screen() {
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    cout << "mouse pressed" << endl;
                     for (int i = 0; i < SignUp_Textbox.size(); i++) {
                         if (SignUp_Textbox[i].isMouseInside(ev.button.x, ev.button.y) == true) {
                             SignUp_Textbox[i].setState(true);
                             pos = i;
-                            cout << pos << endl;
                         }
                         else {
                             SignUp_Textbox[i].setState(false);
@@ -629,7 +613,6 @@ void Clear_Todo_Screen() {
                     }
                     for (int i = 0; i < Toggle_Switch.size(); i++) {
                         if (Toggle_Switch[i].isInside(ev.button.x, ev.button.y) == true) {
-                            cout << "Mouse is in side toggle switch" << endl;
                             if (Toggle_Switch[i].getState() == BUTTON_STATE_MOUSE_OUTSIDE) {
                                 Toggle_Switch[i].setState(BUTTON_STATE_MOUSE_OVER_MOTION);
                                 SignUp_Textbox[i + 1].setType(0);
@@ -642,7 +625,7 @@ void Clear_Todo_Screen() {
                     }
                     if (Sign_up.isInside(ev.button.x, ev.button.y)) {
                         Sign_up.setState(BUTTON_STATE_MOUSE_CLICK);
-                        code = User.signUp(SignUp_Textbox[0].getInputText(), SignUp_Textbox[1].getInputText(), SignUp_Textbox[2].getInputText());
+                        code = User.signUp(All_Account, SignUp_Textbox[0].getInputText(), SignUp_Textbox[1].getInputText(), SignUp_Textbox[2].getInputText());
                         if (code == 0) {
                             Current = Menu;
                             Clear_SignUp_Screen();
@@ -833,11 +816,9 @@ void Clear_Todo_Screen() {
                         if (Body[i].isMouseInside(ev.button.x, ev.button.y)) {
                             Body[i].setState(true);
                             Training_Pos = i;
-                            cout << "Mouse is inside " << i << endl;
                         }
                         else {
                             Body[i].setState(false);
-                            cout << "Mouse is outside " << i << endl;
                         }
                     }
                     for (int i = 0; i < 3; i++) {
@@ -903,14 +884,22 @@ void Clear_Todo_Screen() {
                     else {
                         Save.setState(BUTTON_STATE_MOUSE_OUTSIDE);
                     }
+                    if (Del.isInside(ev.button.x, ev.button.y)) {
+                        Del.setState(BUTTON_STATE_MOUSE_OVER_MOTION);
+                    }
+                    else {
+                        Del.setState(BUTTON_STATE_MOUSE_OUTSIDE);
+                    }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    cout << "mouse pressed" << endl;
+                    if (Del.isInside(ev.button.x, ev.button.y)) {
+                        Del.setState(BUTTON_STATE_MOUSE_CLICK);
+                        User.deleteTask(All_Account, task, check, Count);
+                    }
                     for (int i = 0; i < Count; i++) {
                         if (task[i].isMouseInside(ev.button.x, ev.button.y) == true) {
                             task[i].setState(true);
                             Todo_Pos = i;
-                            cout << Todo_Pos << endl;
                         }
                         else {
                             task[i].setState(false);
@@ -919,6 +908,7 @@ void Clear_Todo_Screen() {
                     //Nut back
                     if (Todo_Back.isInside(ev.button.x, ev.button.y)) {
                         Todo_Back.setState(BUTTON_STATE_MOUSE_CLICK);
+                        User.Save_Todo_List(All_Account, task, check, Count);
                         Current = Menu;
                         Clear_Todo_Screen();
                         Menu_Screen();
@@ -931,20 +921,20 @@ void Clear_Todo_Screen() {
                     //Save the list
                     else if (Save.isInside(ev.button.x, ev.button.y)) {
                         Save.setState(BUTTON_STATE_MOUSE_CLICK);
-                        if (User.Save_Todo_List(User, task, Count) == true) {
+                        if (User.Save_Todo_List(All_Account, task, check, Count) == true) {
                             noti_check.loadFromRenderedText(Renderer, "SAVED", text_color, Content_Font);
+                        }
+                        else {
+                            noti_check.loadFromRenderedText(Renderer, "UNSAVED", text_color, Content_Font);
                         }
                     }
                     for (int i = 0; i < check.size(); i++) {
                         if (check[i].isInside(ev.button.x, ev.button.y) == true) {
-                            cout << "Mouse is in side check switch" << endl;
                             if (check[i].getState() == BUTTON_STATE_MOUSE_OUTSIDE) {
                                 check[i].setState(BUTTON_STATE_MOUSE_OVER_MOTION);
-
                             }
                             else if (check[i].getState() == BUTTON_STATE_MOUSE_OVER_MOTION) {
                                 check[i].setState(BUTTON_STATE_MOUSE_OUTSIDE);
-
                             }
                         }
                     }
@@ -955,9 +945,12 @@ void Clear_Todo_Screen() {
                     }
                     else if (ADD.isInside(ev.button.x, ev.button.y)) {
                         ADD.setState(BUTTON_STATE_MOUSE_OUTSIDE);
-                    }
-                    if (Save.isInside(ev.button.x, ev.button.y)) {
+                    } 
+                    else if (Save.isInside(ev.button.x, ev.button.y)) {
                         Save.setState(BUTTON_STATE_MOUSE_OUTSIDE);
+                    }
+                    else if (Del.isInside(ev.button.x, ev.button.y)) {
+                        Del.setState(BUTTON_STATE_MOUSE_OUTSIDE);
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -1020,6 +1013,7 @@ int main(int argc, char* args[]) {
             SDL_Event ev;
             int pos = 0;
             int code = 0;
+            User.readDataBase(All_Account);
             while (quit == false) {
                 if (Current == Start) {
                     Render_Start_Screen();

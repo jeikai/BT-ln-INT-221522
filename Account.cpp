@@ -18,17 +18,17 @@ void Account::setUserName(string user) {
     username = user;
 }
 
-void Account::saveDataBase () { // ghi thêm tài khoản và mật khẩu mới tạo
+void Account::saveDataBase (vector<vector<string>> &All_Account) { // ghi thêm tài khoản và mật khẩu mới tạo
     vector<string> new_user;
     new_user.push_back(username);
     new_user.push_back(password);
     All_Account.push_back(new_user);
-    ofstream Accounts ("D:/MyProject/Account/Accounts.txt", ios::ate);
+    ofstream Accounts ("Account/Accounts.txt", ios::ate);
     for (int i = 0; i < All_Account.size(); i++) {
         for (int j = 0; j < All_Account[i].size(); j++) {
             Accounts << All_Account[i][j] << "/";
         }
-        Accounts << "\n";
+        if (i < All_Account.size() - 1) Accounts << '\n';
     }
     Accounts.close();
 }
@@ -56,32 +56,33 @@ void Account::setPassword (string Password) {
     password = Password;
 }
 
-bool Account::signIn(string User, string Pass) {
+bool Account::signIn(vector<vector<string>>& All_Account, string User, string Pass) {
+    bool check = false;
     if (All_Account.size() == 0) {
-        readDataBase();
+        readDataBase(All_Account);
     }
     for (int i = 0; i < All_Account.size(); i++) {
-        if (User == All_Account[i][0]) {
-            if (Pass == All_Account[i][1]) {
+        if (All_Account[i][0] == User) {
+            if (All_Account[i][1] == Pass) {
                 username = User;
                 password = Pass;
-                cout << "Welcome!" << endl;
-                return true;
+                check = true;
+                break;
             }
             else {
-                cout << "Incorrect Password!" << endl;
+                check = false;
             }
         }
         else {
-            cout << "Incorrect Username!" << endl;
+            check = false;
         }
     }
-    return false;
+    return check;
 }
 
-void Account::readDataBase() { // đọc tất cả tài khoản và mật khẩu đã lưu
+void Account::readDataBase(vector<vector<string>>& All_Account) { // đọc tất cả tài khoản và mật khẩu đã lưu
     ifstream Accounts;
-    Accounts.open("D:/MyProject/Account/Accounts.txt");
+    Accounts.open("Account/Accounts.txt");
     if (Accounts) {
         while (Accounts.eof() == false) {
             string temp;
@@ -104,9 +105,9 @@ void Account::readDataBase() { // đọc tất cả tài khoản và mật khẩ
     Accounts.close();
 }
 
-int Account::signUp(string User, string Pass1, string Pass2) {
+int Account::signUp(vector<vector<string>>& All_Account, string User, string Pass1, string Pass2) {
     if (All_Account.size() == 0) {
-        readDataBase();
+        readDataBase(All_Account);
     }
     for (int i = 0; i < All_Account.size(); i++) {
         if (User == All_Account[i][0]) {
@@ -118,7 +119,7 @@ int Account::signUp(string User, string Pass1, string Pass2) {
                 if (checkPassword(Pass1)) {
                     username = User;
                     password = Pass1;
-                    saveDataBase();
+                    saveDataBase(All_Account);
                     break;
                 }
                 else {
@@ -135,43 +136,84 @@ int Account::signUp(string User, string Pass1, string Pass2) {
     return 0;
 }
 
-bool Account::Save_Todo_List(Account User, vector<Textbox> todo_list, int &count) {
+bool Account::Save_Todo_List(vector<vector<string>>& All_Account, vector<Textbox> &todo_list, vector<Button>& check, int &count) {
     if (All_Account.size() == 0) {
-        readDataBase();
+        readDataBase(All_Account);
     }
     for (int i = 0; i < All_Account.size(); i++) {
-        if (User.getUserName() == All_Account[i][0]) {
-            for (int j = 0; j < count; j++) {
-                All_Account[i].push_back(todo_list[j].getInputText());
+        if (username == All_Account[i][0]) {
+            for (long j = 0; j < count; j++) {
+                string temp = "";
+                if (check[j].getState() == BUTTON_STATE_MOUSE_OVER_MOTION) {
+                    temp = todo_list[j].getInputText() + '1';
+                }
+                else {
+                    temp = todo_list[j].getInputText() + '0';
+                }
+                if (j + 2 < All_Account[i].size()) {
+                    All_Account[i][j + 2] = temp;
+                }
+                else {
+                    All_Account[i].push_back(temp);
+                }
             }
-            saveTask();
+            saveTask(All_Account);
             return true;
         }
     }
     return false;
 }
 
-void Account::saveTask() {
-    ofstream Accounts("D:/MyProject/Account/Accounts.txt", ios::ate);
+void Account::saveTask(vector<vector<string>>& All_Account) {
+    ofstream Accounts("Account/Accounts.txt", ios::ate);
     for (int i = 0; i < All_Account.size(); i++) {
         for (int j = 0; j < All_Account[i].size(); j++) {
             Accounts << All_Account[i][j] << "/";
         }
-        Accounts << "\n";
+        if (i < All_Account.size() - 1) Accounts << "\n";
     }
     Accounts.close();
 }
 
-void Account::readTask(Account User, vector<Textbox> todo_list, int &count) {
+void Account::readTask(vector<vector<string>>& All_Account, vector<Textbox> &todo_list, vector<Button> &check, int &count) {
     for (int i = 0; i < All_Account.size(); i++) {
-        if (User.getUserName() == All_Account[i][0]) {
+        if (All_Account[i].at(0) == username) {
             if (All_Account[i].size() >= 3) {
                 for (int j = 2; j < All_Account[i].size(); j++) {
-                    todo_list[count].setInputText(All_Account[i][j]);
+                    string temp = All_Account[i][j];
+                    if (temp[temp.length() - 1] == '1') {
+                        check[count].setState(BUTTON_STATE_MOUSE_OVER_MOTION);
+                    }
+                    temp.pop_back();
+                    todo_list[count].setInputText(temp);
                     count++;
                 }
             }
         }
     }
+}
+
+void Account::deleteTask(vector<vector<string>>& All_Account, vector<Textbox>& todo_list, vector<Button> &check, int& count) {
+    for (int i = 0; i < count; i++) {
+        if (todo_list[i].getState() == true) {
+            for (int j = i; j <= count; j++) {
+                todo_list[j] = todo_list[j + 1];
+                check[j].setState(check[j + 1].getState());
+            }
+            count--;
+            for (int x = 0; x < All_Account.size(); x++) {
+                if (username == All_Account[x][0]) {
+                    for (int y = i + 2; y < count + 2; y++) {
+                        All_Account[x][y] = All_Account[x][y + 1];
+                    }
+                    All_Account[x].pop_back();
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    saveTask(All_Account);
+    cout << "deleted" << endl;
 }
 

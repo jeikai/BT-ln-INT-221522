@@ -5,7 +5,7 @@ Timer::Timer() {
 	stop_point = 0;
 	pause = false;
 	start = false;
-	alarm = Mix_LoadMUS("D:/MyProject/sound/alarm.mp3");
+	alarm = Mix_LoadMUS("sound/alarm.mp3");
 }
 
 Timer::Timer(int stop) {
@@ -14,7 +14,7 @@ Timer::Timer(int stop) {
 	stop_point = stop;
 	pause = false;
 	start = false;
-	alarm = Mix_LoadMUS("D:/MyProject/sound/alarm.mp3");
+	alarm = Mix_LoadMUS("sound/alarm.mp3");
 }
 
 void Timer::setStopPoint(int stop) {

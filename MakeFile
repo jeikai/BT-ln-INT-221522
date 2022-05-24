@@ -1,24 +1,13 @@
-How to run this project:
-    git init
-    git clone https://github.com/jeikai/BT-ln-INT-221522.git
+all:
     
-    //Build MyTexture
     g++ -Isrc/include -Lsrc/lib -c MyTexture.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-    
-    //Build Button
+
     g++ -Isrc/include -Lsrc/lib -c Button.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-    
-    //Build textbox
+
     g++ -Isrc/include -Lsrc/lib -c Textbox.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-    
-    //Build timer
+
     g++ -Isrc/include -Lsrc/lib -c Timer.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
-     g++ -Isrc/include -Lsrc/lib -o demo demo.cpp MyTexture.o Button.o Textbox.o Timer.o Account.o -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-    g++ -Isrc/include -Lsrc/lib -c main.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-Contributors:
-    +Nguyen Minh Kien: textbox, timer functions, training functions, i/o files, password, sign in, sign up
-    +Tran Quang Phuc: app graphics and design buttons, list funtions, making menu 
+    g++ -Isrc/include -Lsrc/lib -c Account.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
-    
-    
+    g++ -Isrc/include -Lsrc/lib -o demo demo.cpp MyTexture.o Button.o Textbox.o Timer.o Account.o -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
