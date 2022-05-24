@@ -22,9 +22,12 @@ How to run this project:
     
     //Build timer
     g++ -Isrc/include -Lsrc/lib -c Timer.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-     g++ -Isrc/include -Lsrc/lib -o demo demo.cpp MyTexture.o Button.o Textbox.o Timer.o Account.o -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-    g++ -Isrc/include -Lsrc/lib -c main.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+    
+    //Build Account
+    g++ -Isrc/include -Lsrc/lib -c Account.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+    
+    //Build Demo app
+    g++ -Isrc/include -Lsrc/lib -o demo demo.cpp MyTexture.o Button.o Textbox.o Timer.o Account.o -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 _Contributors:
 +Nguyen Minh Kien: textbox, timer functions, training functions, i/o files, password, sign in, sign up.
 +Tran Quang Phuc: app graphics and design buttons, background….etc, list functions, making menu.
